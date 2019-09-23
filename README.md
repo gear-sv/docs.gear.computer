@@ -47,14 +47,111 @@ ___
 
 ## Gear Contracts
 
+Compile, test, and deploy contracts to bitcoin.
+
 <p align="left">
   <img src="./gear_docs.png" width="600" syle="padding: 40px"
 </p>
 
+### Setup
+1. `npm i gear-contracts -g`
+2. Install emscripten.
+
+### CLI
+1. `gear-contracts init`
+2. `gear-contracts keys`
+3. `gear-contracts compile`
+4. `gear-contracts test`
+5. `gear-contracts deploy`
+
 ## Gear Nano
 
-## FungibleToken
+### Setup
 
-## NonFungibleToken
+### CLI
+1. `gear-nano init [contractID]`
+2. `gear-nano processor`
+3. `gear-nano transactions`
+4. `gear-nano state`
+5. `gear-nano app`
 
-## NamingService
+## Contracts
+
+### FungibleToken
+
+```c++
+FungibleToken::FungibleToken(string owner) {
+  this->supply = 0;
+  this->owner = owner;
+}
+
+const string& FungibleToken::setOwner(string SENDER, string newOwner) {
+  // check that SENDER is the current owner
+  if (SENDER != this->owner) {
+    return "fail";
+  }
+
+  this->owner = newOwner;
+  return "pass";
+}
+
+const string& FungibleToken::mint(string SENDER, unsigned int amount) {
+  // only the owner can mint
+  if (SENDER != this->owner) {
+    return "fail";
+  }
+
+  // mint tokens, assign to owner
+  this->supply = this->supply + amount;
+
+  // increment owner balance
+  if (this->balances.find(SENDER) == this->balances.end()) {
+    this->balances.insert(pair<string, unsigned int>(SENDER, amount));
+  } else {
+    unsigned int balance = this->balances[SENDER];
+    this->balances[SENDER] = balance + amount;
+  }
+
+  return "pass";
+}
+
+const string& FungibleToken::transfer(string SENDER, string recipient, unsigned int amount) {
+  // check if SENDER has sufficient funds
+  if (this->balances[SENDER] < amount) {
+    return "fail";
+  }
+
+  // increment recipient balance
+  if (this->balances.find(recipient) == this->balances.end()) {
+    this->balances.insert(pair<string, unsigned int>(recipient, amount));
+  } else {
+    unsigned int recipientBalance = this->balances[recipient];
+    this->balances[recipient] = recipientBalance + amount;
+  }
+
+  // decrement SENDER balance
+  int senderBalance = this->balances[SENDER];
+  this->balances[SENDER] = senderBalance - amount;
+
+  return "pass";
+}
+
+const unsigned int& FungibleToken::getSupply() {
+  return this->supply;
+}
+
+const string& FungibleToken::getOwner() {
+  return this->owner;
+}
+
+const unsigned int& FungibleToken::getBalance(string address) {
+  return this->balances[address];
+}
+
+const map<string, unsigned int>& FungibleToken::getBalances() {
+  return this->balances;
+}
+```
+### NonFungibleToken
+
+### NamingService
