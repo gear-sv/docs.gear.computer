@@ -4,7 +4,6 @@ ___
 
 ![](worm_gear.gif)
 
-
 <button name="button"  
   style="background-color: #00FF00;"
   onclick="window.location.href='https://github.com/gear-sv/gear-contracts'">
