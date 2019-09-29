@@ -166,17 +166,34 @@ npm i gear-nano -g
 npm i pm2 -g
 ```
 
-### CLI
+### API
 
-#### `gear-nano init [contractID]`
+```
+gear-nano init 6787dfa742f963c6641e901d8e81da2930d62820b7837b7fd1e28c7bbf394727
+```
 
-#### `gear-nano processor`
+1. Fetches contract package tar ball from the on chain transaction. `contractID` is the transaction hash of the contract deployment.
+2. Fetches the `blockHeight` from the transaction.
+3. Fetches the `constructor` input from the transaction.
 
-#### `gear-nano transactions`
+#### gear-nano processor
 
-#### `gear-nano state`
+1. Converts emscripten module [contractName].out.js and wasm bytecode file [contractName].out.wasm into a single javascript Module.
+2. Initializes contract with the constructor input from deployement.
+3. Starts Bitbus and Neon Planaria scraping servers which filter for contract calls pointed at the contractID.
+4. Initializes contract inside the WASM virtual machine runtime.
+5. Starts block handler that aggregates contract calls and feeds into the contract.
 
-#### `gear-nano app`
+#### gear-nano state
+1. Starts Planarium server which accepts state updates from the processor over ZeroMQ.
+2. Starts Http server which allows you to query the state at a given block height.
+
+#### gear-nano transactions
+1. Starts Planarium server which accepts state updates from the processor over ZeroMQ.
+2. Starts Http server which allows you to query a transaction by the transaction hash.
+
+#### gear-nano clear
+1. Clears the server state by deleting `StateDB`, `TxDB` and `tape.txt`.
 
 ___
 
