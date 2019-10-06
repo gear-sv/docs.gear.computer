@@ -1,4 +1,4 @@
-### Gear SDK
+# ⚙️ Gear SDK
 ___
 ## Gear: smart contracts on bitcoin
 
@@ -134,7 +134,7 @@ Uses the tape testing framework which comes bundled with the global install.
 
 ***MAKE SURE YOUR KEY IS FUNDED BEFORE PROCEEDING.***
 
-*Contract packages around 30 kb. 10 cents should be enough.*
+*Contract packages are around 30 kb. 10 cents should be enough.*
 #### `gear-contracts deploy`
 ```
 1. Creates a tempory ./tmp directory to hold contract package.
@@ -148,6 +148,8 @@ THE TRANSACTION HASH IS NOW ALS0 YOUR NEW CONTRACT ID
 ```
 ___
 ## Gear Nano
+
+<img src="./gear_nano.png" width="600" syle="padding: 40px" />
 
 <button name="button"
   style="background-color: #00FF00;"
@@ -167,38 +169,52 @@ npm i pm2 -g
 
 ### API
 
+#### `gear-nano init [contractID]`
+
 ```
 gear-nano init 6787dfa742f963c6641e901d8e81da2930d62820b7837b7fd1e28c7bbf394727
 ```
 
+```
 1. Fetches contract package tar ball from the on chain transaction. `contractID` is the transaction hash of the contract deployment.
 2. Fetches the `blockHeight` from the transaction.
 3. Fetches the `constructor` input from the transaction.
+```
 
-#### gear-nano processor
+#### `gear-nano processor`
 
+```
 1. Converts emscripten module [contractName].out.js and wasm bytecode file [contractName].out.wasm into a single javascript Module.
 2. Initializes contract with the constructor input from deployement.
 3. Starts Bitbus and Neon Planaria scraping servers which filter for contract calls pointed at the contractID.
 4. Initializes contract inside the WASM virtual machine runtime.
 5. Starts block handler that aggregates contract calls and feeds into the contract.
+```
 
-#### gear-nano state
+#### `gear-nano state`
+
+```
 1. Starts Planarium server which accepts state updates from the processor over ZeroMQ.
 2. Starts Http server which allows you to query the state at a given block height.
+```
 
-#### gear-nano transactions
+#### `gear-nano transactions`
+
+```
 1. Starts Planarium server which accepts state updates from the processor over ZeroMQ.
 2. Starts Http server which allows you to query a transaction by the transaction hash.
+```
 
-#### gear-nano clear
+#### `gear-nano clear`
+
+```
 1. Clears the server state by deleting `StateDB`, `TxDB` and `tape.txt`.
-
+```
 ___
 
 ## Contracts
 
-#### `Chain Variables`
+### `Chain Variables`
 The "contract" is just a pure c++ class, as easy as that. The only difference are special key words input parameters that can use information verified by the chain.
 
 `SENDER`
@@ -210,7 +226,7 @@ The height of the block in which the transaction was processed.
 `BLOCK_TIMESTAMP`
 The timestamp of the block in which the transaction was processed.
 
-#### `Header File`
+### `Header File`
 
 ```
 Just as you normally do with c++ code,
@@ -243,7 +259,7 @@ class FungibleToken {
 
 ```
 
-#### `CPP File`
+### `CPP File`
 
 ```
 This is where you put the implementation of the different functions.
@@ -252,7 +268,7 @@ These functions can modify the state variables which will be queryable via gear-
 Currently the framework only provides support for c++11 and the std library.
 ```
 
-#### Emscripten Embind
+### `Emscripten Embind`
 ```
 Emscripten's embind pattern is used to export a javascript class
 that maps one to one with the underlying c++ class.
@@ -274,7 +290,7 @@ EMSCRIPTEN_BINDINGS(FungibleToken_example) {
  }
 ```
 
-#### `JSON ABI`
+### `JSON ABI`
 
 ```
 Until we get our act together and engineer a js based c++ parser,
@@ -317,7 +333,7 @@ you will have to manually create the abi as a json [contractName].json file.
 
 ### FungibleToken
 
-#### constructor
+#### `constructor`
 
 ```c++
 FungibleToken::FungibleToken(string owner) {
@@ -326,7 +342,7 @@ FungibleToken::FungibleToken(string owner) {
 }
 ```
 
-#### setOwner
+#### `setOwner`
 
 ```c++
 const string& FungibleToken::setOwner(string SENDER, string newOwner) {
@@ -340,7 +356,7 @@ const string& FungibleToken::setOwner(string SENDER, string newOwner) {
 }
 ```
 
-#### mint
+#### `mint`
 
 ```c++
 const string& FungibleToken::mint(string SENDER, unsigned int amount) {
@@ -365,7 +381,8 @@ const string& FungibleToken::mint(string SENDER, unsigned int amount) {
 
 ```
 
-#### transfer
+
+#### `transfer`
 
 ```c++
 const string& FungibleToken::transfer(string SENDER, string recipient, unsigned int amount) {
@@ -391,7 +408,7 @@ const string& FungibleToken::transfer(string SENDER, string recipient, unsigned 
 
 ```
 
-#### getters
+#### `getters`
 
 
 ```c++
