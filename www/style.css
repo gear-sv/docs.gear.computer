@@ -77,3 +77,15 @@ body {
   10% { transform: scale(1.1, 1.1); }
   100%   { transform: scale(1, 1);}
 }
+
+.markdown-section code,
+.markdown-section pre,
+.markdown-section pre > code {
+    color: #eee; /* default color for elements not styled by prism theme */
+    background-color: #353544; /* dark background, because vue.css modify it */
+}
+
+/* because the bgcolor change in previous css rule. font-color when using inline code tag */
+.markdown-section code {
+    color: #eccb84; 
+}
