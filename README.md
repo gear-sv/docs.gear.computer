@@ -92,12 +92,6 @@ Compile, test, and deploy contracts to bitcoin.
 npm i gear-contracts -g
 ```
 
-```
-Install Emscripten
-
-Macos: brew install emscripten
-```
-
 ### API
 
 #### `gear-contracts init`
@@ -112,8 +106,6 @@ Macos: brew install emscripten
 1. Generates a bitcoin keypair [privateKey, publicKey, address] to keys.json file.
 2. Saves qr code of address to address.png file.
 ```
-
-***MAKE SURE YOU HAVE EMSCRIPTEN INSTALLED BEFORE PROCEEDING.***
 
 #### `gear-contracts compile`
 ```
